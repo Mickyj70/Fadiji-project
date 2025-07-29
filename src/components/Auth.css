@@ -267,7 +267,7 @@
   .auth-form-container {
     margin-left: 40px;
     justify-content: center;
-    border: #dc2626 1px solid;
+    /* border: #dc2626 1px solid; */
     max-width: 80%;
     width: 100%; /* Ensure full width on mobile */
   }
