@@ -50,7 +50,7 @@ const SignIn = () => {
       style={{ backgroundImage: "url('./background.png')" }}
     >
       {/* Background overlay */}
-      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-40 z-10"></div>
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-transparent bg-opacity-40 z-10"></div>
 
       {/* Left side - Info section */}
       <div className="relative z-20 text-white max-w-md flex-1 lg:block hidden">
@@ -87,7 +87,10 @@ const SignIn = () => {
           </h3>
           <p className="text-gray-500 mb-6 lg:mb-8 text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-emerald-600 no-underline font-medium hover:underline">
+            <Link
+              to="/signup"
+              className="text-emerald-600 no-underline font-medium hover:underline"
+            >
               Create one here
             </Link>
           </p>
@@ -129,7 +132,10 @@ const SignIn = () => {
                 />
                 Keep me logged in
               </label>
-              <Link to="/forgot-password" className="text-emerald-600 no-underline text-sm font-medium hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-emerald-600 no-underline text-sm font-medium hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -146,7 +152,10 @@ const SignIn = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-500 text-sm">
               Forgot your password?{" "}
-              <Link to="/forgot-password" className="text-emerald-600 no-underline font-medium hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-emerald-600 no-underline font-medium hover:underline"
+              >
                 Reset it here
               </Link>
             </p>
