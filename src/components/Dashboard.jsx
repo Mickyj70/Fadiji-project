@@ -19,42 +19,38 @@ import { supabase } from "../lib/supabase";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+
+  // Theme state (persist + toggle <html>.dark)
   const [dark, setDark] = useState(() => {
     const saved = localStorage.getItem("theme");
     if (saved) return saved === "dark";
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
 
-  // Sync html.dark class for Tailwind + persist
   useEffect(() => {
-    const root = document.documentElement;
-    if (dark) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // Close profile dropdown on outside click
+  // Profile menu
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
   useEffect(() => {
-    function onDocClick(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const onDocClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
         setMenuOpen(false);
-      }
-    }
+    };
     if (menuOpen) document.addEventListener("mousedown", onDocClick);
     return () => document.removeEventListener("mousedown", onDocClick);
   }, [menuOpen]);
 
+  // Supabase sign out (unchanged)
   const handleSignOut = async () => {
-    await supabase.auth.signOut(); // unchanged
+    await supabase.auth.signOut();
     navigate("/signin");
   };
 
+  // Mock list
   const reportItems = useMemo(
     () => [
       {
@@ -89,16 +85,145 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* HEADER */}
       <header className="sticky top-0 z-30 border-b border-gray-200 bg-white/95 backdrop-blur dark:border-gray-800 dark:bg-gray-900/90">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-3 px-4 py-3">
-          {/* Logo + search */}
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-sm bg-emerald-600" />
-              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Logoipsum
-              </span>
+        <div className="w-full px-3 py-2 sm:px-4">
+          <div className="flex items-center justify-between gap-2">
+            {/* Left: logo + search */}
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="h-3 w-3 rounded-sm bg-emerald-600" />
+                <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                  Logoipsum
+                </span>
+              </div>
+              <div className="relative hidden min-w-[220px] max-w-[300px] flex-1 sm:block">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  placeholder="Search anything"
+                  className="w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                />
+              </div>
             </div>
-            <div className="relative hidden min-w-[260px] max-w-[340px] flex-1 sm:block">
+
+            {/* Middle tabs (desktop) — force light bg to be transparent */}
+            <nav className="hidden md:flex flex-nowrap items-center gap-5 whitespace-nowrap text-sm">
+              {["Dashboard", "Scan Status", "Report", "Alert", "More"].map(
+                (item) => (
+                  <button
+                    key={item}
+                    className="bg-transparent text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
+                  >
+                    {item}
+                  </button>
+                )
+              )}
+            </nav>
+
+            {/* Right cluster */}
+            <div className="flex items-center gap-1">
+              {/* Icons-only theme toggle */}
+              <div className="flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+                <button
+                  title="Light"
+                  aria-label="Light"
+                  onClick={() => {
+                    document.documentElement.classList.remove("dark");
+                    localStorage.setItem("theme", "light");
+                    setDark(false);
+                  }}
+                  className={`rounded-full p-1.5 transition ${
+                    !dark
+                      ? "bg-white text-emerald-600 shadow-sm dark:bg-gray-900 dark:text-emerald-400"
+                      : "bg-transparent text-gray-600 hover:text-gray-800 dark:text-gray-300"
+                  }`}
+                >
+                  <Sun className="h-4 w-4" />
+                </button>
+                <button
+                  title="Dark"
+                  aria-label="Dark"
+                  onClick={() => {
+                    document.documentElement.classList.add("dark");
+                    localStorage.setItem("theme", "dark");
+                    setDark(true);
+                  }}
+                  className={`rounded-full p-1.5 transition ${
+                    dark
+                      ? "bg-white text-emerald-600 shadow-sm dark:bg-black dark:text-emerald-400"
+                      : "bg-transparent text-gray-600 hover:text-gray-800 dark:text-gray-300"
+                  }`}
+                >
+                  <Moon className="h-4 w-4" />
+                </button>
+              </div>
+
+              <button
+                className="relative rounded-full p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                title="Notifications"
+              >
+                <Bell className="h-5 w-5" />
+                <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-gray-900" />
+              </button>
+
+              {/* Avatar dropdown (includes mobile nav + Sign Out) */}
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen((s) => !s)}
+                  className="flex items-center gap-2 rounded-full bg-gray-100 p-1 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                >
+                  <img
+                    src="https://i.pravatar.cc/40?img=5"
+                    alt="user"
+                    className="h-7 w-7 rounded-full"
+                  />
+                  <ChevronDown className="hidden h-4 w-4 text-gray-500 sm:block" />
+                </button>
+
+                {menuOpen && (
+                  <div className="absolute right-0 z-40 mt-2 w-52 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900">
+                    {/* Mobile-only nav inside dropdown */}
+                    <div className="md:hidden">
+                      <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        Navigation
+                      </div>
+                      {[
+                        "Dashboard",
+                        "Scan Status",
+                        "Report",
+                        "Alert",
+                        "More",
+                      ].map((item) => (
+                        <button
+                          key={item}
+                          className="block w-full bg-transparent px-4 py-2 text-left text-sm text-white hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                        >
+                          {item}
+                        </button>
+                      ))}
+                      <div className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
+                    </div>
+
+                    <button className="block w-full bg-transparent px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
+                      Profile
+                    </button>
+                    <button className="block w-full bg-transparent px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
+                      Settings
+                    </button>
+                    <div className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
+                    <button
+                      onClick={handleSignOut}
+                      className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile search */}
+          <div className="mt-2 block sm:hidden">
+            <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
                 placeholder="Search anything"
@@ -106,105 +231,11 @@ export default function DashboardPage() {
               />
             </div>
           </div>
-
-          {/* Center nav — now no background, no wrap */}
-          <nav className="hidden md:flex flex-nowrap items-center gap-6 overflow-x-auto whitespace-nowrap text-sm">
-            {["Dashboard", "Scan Status", "Report", "Alert", "More"].map(
-              (item) => (
-                <button
-                  key={item}
-                  className="bg-transparent text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
-                >
-                  {item}
-                </button>
-              )
-            )}
-          </nav>
-
-          {/* Right cluster */}
-          <div className="flex items-center gap-2">
-            {/* Light/Dark segmented — fixed */}
-            <div className="flex rounded-full border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
-              <button
-                onClick={() => setDark(false)}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs transition ${
-                  !dark
-                    ? "bg-white text-emerald-600 shadow-sm dark:bg-gray-900 dark:text-emerald-400"
-                    : "text-gray-600 hover:text-gray-800 dark:text-gray-300"
-                }`}
-                aria-pressed={!dark}
-              >
-                <Sun className="h-4 w-4" />
-                Light
-              </button>
-              <button
-                onClick={() => setDark(true)}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs transition ${
-                  dark
-                    ? "bg-white text-emerald-600 shadow-sm dark:bg-black dark:text-emerald-400"
-                    : "text-gray-600 hover:text-gray-800 dark:text-gray-300"
-                }`}
-                aria-pressed={dark}
-              >
-                <Moon className="h-4 w-4" />
-                Dark
-              </button>
-            </div>
-
-            <button className="relative rounded-full p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-gray-900" />
-            </button>
-
-            {/* Avatar + dropdown (Sign Out moved here) */}
-            <div className="relative" ref={menuRef}>
-              <button
-                onClick={() => setMenuOpen((s) => !s)}
-                className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <img
-                  src="https://i.pravatar.cc/40?img=5"
-                  alt="user"
-                  className="h-7 w-7 rounded-full"
-                />
-                <ChevronDown className="hidden h-4 w-4 text-gray-500 sm:block" />
-              </button>
-
-              {menuOpen && (
-                <div className="absolute right-0 z-40 mt-2 w-44 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900">
-                  <button className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
-                    Profile
-                  </button>
-                  <button className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
-                    Settings
-                  </button>
-                  <div className="my-1 h-px bg-gray-200 dark:bg-gray-800" />
-                  <button
-                    onClick={handleSignOut}
-                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile search row */}
-        <div className="block border-t border-gray-200 px-4 py-2 sm:hidden dark:border-gray-800">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              placeholder="Search anything"
-              className="w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-            />
-          </div>
         </div>
       </header>
 
       {/* PAGE */}
-      <main className="mx-auto max-w-[1200px] gap-6 px-4 py-6 lg:grid lg:grid-cols-3">
+      <main className="mx-auto max-w-[1200px] gap-5 px-3 py-5 lg:grid lg:grid-cols-3">
         {/* LEFT: stats + globe */}
         <section className="lg:col-span-2">
           <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -242,13 +273,12 @@ export default function DashboardPage() {
 
         {/* RIGHT: report + filter */}
         <aside className="mt-6 space-y-6 lg:mt-0">
-          {/* Report card */}
           <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
               <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                 Report
               </h3>
-              <button className="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+              <button className="rounded-md border border-gray-300 bg-transparent px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
                 Today
               </button>
             </div>
@@ -294,7 +324,7 @@ export default function DashboardPage() {
             </ul>
           </div>
 
-          {/* Filter card */}
+          {/* Filter */}
           <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
               <h3 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100">
@@ -417,7 +447,6 @@ function SegmentButton({ children, icon, active }) {
     </button>
   );
 }
-
 function Pill({ children, icon }) {
   return (
     <button className="flex items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">

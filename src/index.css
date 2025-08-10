@@ -1,12 +1,31 @@
 @import "tailwindcss";
-@tailwind utilities;
 
+/* v4 class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* ---------- Base resets ---------- */
 @layer base {
   body {
     @apply m-0 p-0 min-w-80 min-h-screen;
   }
 }
 
+/* ---------- Design tokens (Tailwind v4 @theme) ---------- */
+@theme {
+  --color-primary: hsl(158, 64%, 35%); /* used by bg-primary, text-primary, etc. */
+  --radius-lg: 0.75rem;
+}
+
+/* ---------- Custom utilities ---------- */
+@layer utilities {
+  .btn-brand {
+    @apply bg-primary text-white rounded-xl px-4 py-2;
+  }
+}
+
+/* ---------- Your global element styles (kept) ---------- */
+/* Tip: Tailwind utilities will override these where used */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -31,15 +50,13 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+/* Remove the old light-only media block to avoid conflicts with class-based dark mode.
+   If you want a system fallback, leave this out and use the <script> below instead. */
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+  a:hover { color: #747bff; }
+  button { background-color: #f9f9f9; }
+} */
