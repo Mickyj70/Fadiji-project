@@ -9,6 +9,8 @@ import { supabase } from "./lib/supabase";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Dashboard from "./components/Dashboard";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 import "./App.css";
 
 function App() {
@@ -47,6 +49,14 @@ function App() {
           <Route
             path="/signin"
             element={!session ? <SignIn /> : <Navigate to="/dashboard" />}
+          />
+          <Route
+            path="/forgot-password"
+            element={!session ? <ForgotPassword /> : <Navigate to="/dashboard" />}
+          />
+          <Route
+            path="/reset-password"
+            element={<ResetPassword />}
           />
           <Route
             path="/dashboard"
