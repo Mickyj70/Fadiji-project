@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
+import LandingPage from "./components/Landing";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Dashboard from "./components/Dashboard";
@@ -42,6 +43,9 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* Landing page - always accessible */}
+          <Route path="/" element={<LandingPage />} />
+
           <Route
             path="/signup"
             element={!session ? <SignUp /> : <Navigate to="/dashboard" />}
@@ -52,19 +56,14 @@ function App() {
           />
           <Route
             path="/forgot-password"
-            element={!session ? <ForgotPassword /> : <Navigate to="/dashboard" />}
+            element={
+              !session ? <ForgotPassword /> : <Navigate to="/dashboard" />
+            }
           />
-          <Route
-            path="/reset-password"
-            element={<ResetPassword />}
-          />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard"
             element={session ? <Dashboard /> : <Navigate to="/signin" />}
-          />
-          <Route
-            path="/"
-            element={<Navigate to={session ? "/dashboard" : "/signin"} />}
           />
         </Routes>
       </div>
