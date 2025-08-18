@@ -92,7 +92,7 @@ export default function DashboardPage() {
               <div className="flex items-center gap-2 shrink-0">
                 <span className="h-3 w-3 rounded-sm bg-emerald-600" />
                 <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                  Logoipsum
+                  Lassa
                 </span>
               </div>
               <div className="relative hidden min-w-[220px] max-w-[300px] flex-1 sm:block">
