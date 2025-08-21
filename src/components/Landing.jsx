@@ -6,14 +6,14 @@ const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-green-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200">
+      <header className="bg-[#EEEFF1]  backdrop-blur-sm border-b border-gray-200">
         <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
             <img src="/lassa-icon.png" alt="Lassa Lens" className="w-6 h-6" />
-            <span className="text-xl font-semibold text-gray-800">
-              Lassa Lens
+            <span className="text-[22px] font-semibold text-gray-800">
+              LassaLens
             </span>
           </div>
 
@@ -26,7 +26,7 @@ const Landing = () => {
               About
             </a>
             <a
-              href="#"
+              href="#features"
               className="text-gray-600 hover:text-gray-800 transition-colors"
             >
               Feature
@@ -37,20 +37,17 @@ const Landing = () => {
             >
               FAQs
             </a>
-            <a
-              href="#"
-              className="text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              Download
-            </a>
           </nav>
 
           <div className="flex items-center gap-4">
             <Link
               to="/dashboard"
-              className="hidden md:inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition-colors no-underline"
+              className="hidden md:inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-medium transition-colors no-underline  items-center gap-2"
             >
-              Launch App
+              <div className="flex gap-2">
+                <img src="/rocket.svg" alt="" className="w-4 h-4 mt-1" />
+                Launch App
+              </div>
             </Link>
 
             {/* Mobile menu button */}
@@ -100,7 +97,7 @@ const Landing = () => {
                 About
               </a>
               <a
-                href="#"
+                href="#features"
                 className="block text-gray-600 hover:text-gray-800 transition-colors"
               >
                 Feature
@@ -111,47 +108,45 @@ const Landing = () => {
               >
                 FAQs
               </a>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Download
-              </a>
             </nav>
           </div>
         )}
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-16">
+      <section
+        className="w-full px-6 pt-16 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url(/bg-colored.svg)",
+        }}
+      >
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Stay Ahead Of Lassa
-            <br />
-            Fever In Nigeria
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            AI-Powered Lassa Fever Surveillance <br /> for Nigeria
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Real-time reports, verified data, and community signals on lassa
-            <br />
-            fever all in one place.
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            LassaLens uses social media conversations and news reports to detect
+            early warnings signs of lassa fever outbreaks across Nigeria. By
+            spotting signals faster, we help health responders and communities
+            act before its too late
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               to="/signup"
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full flex items-center gap-2 font-medium transition-colors no-underline"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2  rounded-full flex items-center gap-2 font-medium transition-colors no-underline"
             >
-              Launch Map
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+              Launch App
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <img src="/arrow-up.svg" alt="Arrow" className="w-2.5 h-2.5" />
               </div>
             </Link>
             <Link
               to="/signup"
-              className="bg-black  text-white px-8 py-3 rounded-full flex items-center gap-2 font-medium transition-colors no-underline"
+              className="bg-black  text-white px-4 py-2 rounded-full flex items-center gap-2 font-medium transition-colors no-underline"
             >
-              About Lassa
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+              About LassaLens
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <img src="/arrow-up.svg" alt="Arrow" className="w-2.5 h-2.5" />
               </div>
             </Link>
@@ -169,7 +164,7 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className=" bg-white w-full mx-auto px-6 py-16">
+      <section id="features" className=" bg-white w-full mx-auto px-6 py-16">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Track. Detect. Stay Safe.
@@ -227,9 +222,9 @@ const Landing = () => {
           </p>
         </div>
 
-        <div className="relative max-w-4xl mx-auto mb-16">
+        <div className="relative max-w-4xl mx-auto mb-5">
           <img
-            src="/map.svg"
+            src="/map-red.jpg"
             alt="Interactive Map Visualization"
             className="w-full h-auto rounded-lg"
           />
@@ -237,7 +232,7 @@ const Landing = () => {
       </section>
 
       {/* Statistics Dashboard */}
-      <section className="bg-black text-white py-16">
+      <section className="bg-black ml-2 mr-2 text-white py-16 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-2xl">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">

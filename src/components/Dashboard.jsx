@@ -90,13 +90,17 @@ export default function DashboardPage() {
             {/* Left: logo + search */}
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex items-center gap-2 shrink-0">
-                <span className="h-3 w-3 rounded-sm bg-emerald-600" />
+                <img
+                  src="/lassa-icon.png"
+                  alt="Lassa Lens"
+                  className="w-6 h-6"
+                />
                 <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                  Lassa
+                  LassaLens
                 </span>
               </div>
-              <div className="relative hidden min-w-[220px] max-w-[300px] flex-1 sm:block">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <div className="relative hidden min-w-[180px] max-w-[300px] flex-1 sm:block">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-2.5 -translate-y-1/2 text-gray-400" />
                 <input
                   placeholder="Search anything"
                   className="w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
@@ -110,7 +114,7 @@ export default function DashboardPage() {
                 (item) => (
                   <button
                     key={item}
-                    className="bg-transparent text-gray-700 hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
+                    className=" text-black hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
                   >
                     {item}
                   </button>
@@ -121,7 +125,7 @@ export default function DashboardPage() {
             {/* Right cluster */}
             <div className="flex items-center gap-1">
               {/* Icons-only theme toggle */}
-              <div className="flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 dark:bg-gray-800">
+              <div className="flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 ">
                 <button
                   title="Light"
                   aria-label="Light"
@@ -168,7 +172,7 @@ export default function DashboardPage() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((s) => !s)}
-                  className="flex items-center gap-2 rounded-full bg-gray-100 p-1 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+                  className="flex items-center gap-2 rounded-full bg-transparent hover:bg-gray-100 p-1"
                 >
                   <img
                     src="https://i.pravatar.cc/40?img=5"
@@ -278,7 +282,7 @@ export default function DashboardPage() {
               <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                 Report
               </h3>
-              <button className="rounded-md border border-gray-300 bg-transparent px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+              <button className="rounded-md bg-none border border-gray-300  px-2 py-1 text-xs text-gray-600  dark:border-gray-700 dark:text-gray-300 ">
                 Today
               </button>
             </div>
@@ -288,7 +292,7 @@ export default function DashboardPage() {
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
                   AI
                 </span>
-                ZenAI — Scanning 40 Sources for report
+                LassaLens AI — Scanning 40 Sources for report
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                 <div className="h-full w-1/2 rounded-full bg-emerald-500" />
@@ -438,8 +442,8 @@ function SegmentButton({ children, icon, active }) {
     <button
       className={`flex items-center justify-center gap-1 rounded-lg border px-3 py-2 text-sm transition ${
         active
-          ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-          : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+          ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700  dark:text-emerald-300"
+          : "border-gray-200  text-black hover:bg-gray-50 dark:border-gray-800  dark:text-gray-300 "
       }`}
     >
       {icon}

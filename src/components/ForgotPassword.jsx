@@ -38,41 +38,14 @@ const ForgotPassword = () => {
 
   return (
     <div
-      className="flex items-center justify-between min-h-screen w-screen font-sans bg-cover bg-center bg-no-repeat fixed top-0 left-0 right-0 bottom-0 p-8 lg:flex-row flex-col lg:gap-0 gap-8"
+      className="flex items-center justify-center min-h-screen w-screen font-sans bg-cover bg-center bg-no-repeat fixed top-0 left-0 right-0 bottom-0 p-8 lg:flex-row flex-col gap-8 lg:gap-12"
       style={{ backgroundImage: "url('./background.png')" }}
     >
       {/* Background overlay */}
-      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-40 z-10"></div>
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-transparent bg-opacity-40 z-10"></div>
 
-      {/* Left side - Info section */}
-      <div className="relative z-20 text-white max-w-md flex-1 lg:block hidden">
-        <div className="text-white">
-          <h2 className="text-4xl font-bold mb-8 leading-tight">
-            Reset your password securely
-          </h2>
-          <ul className="list-none p-0">
-            <li className="mb-4 text-lg flex items-center">
-              <span className="text-emerald-500 font-bold mr-2">✓</span>
-              Secure password reset process
-            </li>
-            <li className="mb-4 text-lg flex items-center">
-              <span className="text-emerald-500 font-bold mr-2">✓</span>
-              Email verification required
-            </li>
-            <li className="mb-4 text-lg flex items-center">
-              <span className="text-emerald-500 font-bold mr-2">✓</span>
-              Quick and easy process
-            </li>
-            <li className="mb-4 text-lg flex items-center">
-              <span className="text-emerald-500 font-bold mr-2">✓</span>
-              24/7 support available
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Right side - Form */}
-      <div className="relative z-20 flex items-center justify-center lg:justify-end flex-1 max-w-lg lg:mr-24 lg:mb-12 w-full">
+      {/* Centered Form */}
+      <div className="relative z-20 flex items-center justify-center max-w-lg w-full">
         <div className="bg-white p-6 lg:p-10 rounded-2xl shadow-2xl w-full max-w-md">
           <h3 className="text-2xl lg:text-3xl font-semibold mb-2 text-gray-800 text-center">
             Reset Password
