@@ -96,7 +96,7 @@ export default function DashboardPage() {
                   className="w-6 h-6"
                 />
                 <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
-                  LassaLens
+                  <a href="/">LassaLens</a>
                 </span>
               </div>
               <div className="relative hidden min-w-[180px] max-w-[300px] flex-1 sm:block">
@@ -110,22 +110,20 @@ export default function DashboardPage() {
 
             {/* Middle tabs (desktop) — force light bg to be transparent */}
             <nav className="hidden md:flex flex-nowrap items-center gap-5 whitespace-nowrap text-sm">
-              {["Dashboard", "Scan Status", "Report", "Alert", "More"].map(
-                (item) => (
-                  <button
-                    key={item}
-                    className=" text-black hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
-                  >
-                    {item}
-                  </button>
-                )
-              )}
+              {["Scan Status", "Report"].map((item) => (
+                <button
+                  key={item}
+                  className=" text-black hover:text-emerald-600 dark:text-gray-300 dark:hover:text-emerald-400"
+                >
+                  {item}
+                </button>
+              ))}
             </nav>
 
             {/* Right cluster */}
             <div className="flex items-center gap-1">
               {/* Icons-only theme toggle */}
-              <div className="flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 p-1 dark:border-gray-700 ">
+              <div className="flex items-center gap-1 rounded-full border border-gray-300 bg-transparent p-1 dark:border-gray-700 ">
                 <button
                   title="Light"
                   aria-label="Light"
@@ -152,7 +150,7 @@ export default function DashboardPage() {
                   }}
                   className={`rounded-full p-1.5 transition ${
                     dark
-                      ? "bg-white text-emerald-600 shadow-sm dark:bg-black dark:text-emerald-400"
+                      ? "bg-dark text-emerald-600 shadow-sm dark:bg-black dark:text-emerald-400"
                       : "bg-transparent text-gray-600 hover:text-gray-800 dark:text-gray-300"
                   }`}
                 >
@@ -172,10 +170,10 @@ export default function DashboardPage() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((s) => !s)}
-                  className="flex items-center gap-2 rounded-full bg-transparent hover:bg-gray-100 p-1"
+                  className="flex items-center gap-2 rounded-full bg-transparent  p-1"
                 >
                   <img
-                    src="https://i.pravatar.cc/40?img=5"
+                    src="/profile-img.png"
                     alt="user"
                     className="h-7 w-7 rounded-full"
                   />
@@ -189,16 +187,10 @@ export default function DashboardPage() {
                       <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
                         Navigation
                       </div>
-                      {[
-                        "Dashboard",
-                        "Scan Status",
-                        "Report",
-                        "Alert",
-                        "More",
-                      ].map((item) => (
+                      {["Scan Status", "Report"].map((item) => (
                         <button
                           key={item}
-                          className="block w-full bg-transparent px-4 py-2 text-left text-sm text-white hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
+                          className="block w-full bg-transparent px-4 py-2 text-left text-sm text-black hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
                         >
                           {item}
                         </button>
@@ -240,8 +232,8 @@ export default function DashboardPage() {
 
       {/* PAGE */}
       <main className="mx-auto max-w-[1200px] gap-5 px-3 py-5 lg:grid lg:grid-cols-3">
-        {/* LEFT: stats + globe */}
-        <section className="lg:col-span-2">
+        {/* LEFT: stats + globe - Make it sticky */}
+        <section className="lg:col-span-2 lg:sticky lg:top-5 lg:h-screen lg:overflow-hidden">
           <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               { label: "New Cases", value: "340" },

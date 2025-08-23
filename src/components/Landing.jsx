@@ -1,9 +1,74 @@
 import { Link } from "react-router-dom";
-import { FaTwitter, FaFacebook, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import {
+  FaTwitter,
+  FaFacebook,
+  FaWhatsapp,
+  FaEnvelope,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 import { useState } from "react";
 
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFAQ, setOpenFAQ] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const faqData = [
+    {
+      question: "What is LassaLens?",
+      answer:
+        " Lassalens is an AI-powered web platform that tracks social media and news reports to detect early warning signs of Lassa fever outbreaks in Nigeria.",
+    },
+    {
+      question: "Why focus on Lassa fever?",
+      answer:
+        "Nigeria reports thousands of suspected cases each year. Early detection can save lives, reduce spread, and strengthen public health response.",
+    },
+    {
+      question: " How does Lassalens work?",
+      answer:
+        "It collects online data, analyzes trends with AI, and highlights unusual mentions, clusters, or reports linked to Lassa fever.",
+    },
+    {
+      question: "Who can use Lassalens?",
+      answer:
+        " Public health officials, researchers, NGOs, journalists, and community responders who want real-time insights on lassa fever outbreaks in Nigeria",
+    },
+    {
+      question: " Does Lassalens replace official surveillance systems?",
+      answer:
+        " No. It complements existing systems like NCDC’s IDSR by providing faster, real-time digital signals.",
+    },
+    {
+      question: "How reliable is the information?",
+      answer:
+        "Lassalens highlights signals that may suggest outbreaks. These insights should guide further verification by health authorities.",
+    },
+    {
+      question: "Which sources does Lassalens scan?",
+      answer:
+        " It pulls data from Nigerian social media platforms, online news outlets, and public reports.",
+    },
+    {
+      question: "Is Lassalens free to use?",
+      answer:
+        "Yes. Lassalens is publicly accessible to encourage awareness and early action.",
+    },
+    {
+      question: "How Often Is The Data Updated?",
+      answer:
+        "The platform scans and refreshes information continuously, providing near real-time updates.",
+    },
+    {
+      question: "Can Lassalens track other diseases?",
+      answer:
+        " Currently, it is focused on Lassa fever in Nigeria, but the technology can be adapted for other infectious diseases in the future.",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -57,19 +122,19 @@ const Landing = () => {
             >
               <div className="w-6 h-6 flex flex-col justify-center items-center">
                 <span
-                  className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+                  className={`bg-black block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                     mobileMenuOpen
                       ? "rotate-45 translate-y-1"
                       : "-translate-y-0.5"
                   }`}
                 ></span>
                 <span
-                  className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${
+                  className={`bg-black block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${
                     mobileMenuOpen ? "opacity-0" : "opacity-100"
                   }`}
                 ></span>
                 <span
-                  className={`bg-white block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
+                  className={`bg-black block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${
                     mobileMenuOpen
                       ? "-rotate-45 -translate-y-1"
                       : "translate-y-0.5"
@@ -124,11 +189,9 @@ const Landing = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             AI-Powered Lassa Fever Surveillance <br /> for Nigeria
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            LassaLens uses social media conversations and news reports to detect
-            early warnings signs of lassa fever outbreaks across Nigeria. By
-            spotting signals faster, we help health responders and communities
-            act before its too late
+          <p className="text-xl text-gray-600 mb-8 max-w-xl mx-auto">
+            Real-time reports, verified data, and community signals on lassa
+            fever all in one place.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -156,7 +219,7 @@ const Landing = () => {
         {/* Dashboard Preview */}
         <div className="relative max-w-4xl mx-auto">
           <img
-            src="/landingpage-img.svg"
+            src="/landingpage-updated.png"
             alt="Lassa Lens Dashboard Preview"
             className="w-full h-auto rounded-lg "
           />
@@ -174,13 +237,13 @@ const Landing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
           {/* Multi-Source Data Aggregation */}
           <div className="flex justify-center">
             <img
               src="/image1.svg"
               alt="Data aggregation"
-              className="w-full max-w-sm h-32 md:h-auto object-contain"
+              className="w-full max-w-xs md:max-w-sm h-48 md:h-auto object-contain"
             />
           </div>
 
@@ -189,7 +252,7 @@ const Landing = () => {
             <img
               src="/image2.svg"
               alt="Outbreak map"
-              className="w-full max-w-sm h-32 md:h-auto object-contain"
+              className="w-full max-w-xs md:max-w-sm h-48 md:h-auto object-contain"
             />
           </div>
 
@@ -198,7 +261,7 @@ const Landing = () => {
             <img
               src="/image3.svg"
               alt="Statistics"
-              className="w-full max-w-sm h-32 md:h-auto object-contain"
+              className="w-full max-w-xs md:max-w-sm h-48 md:h-auto object-contain"
             />
           </div>
 
@@ -207,7 +270,28 @@ const Landing = () => {
             <img
               src="/image4.svg"
               alt="AI scanning"
-              className="w-full max-w-sm h-32 md:h-auto object-contain"
+              className="w-full max-w-xs md:max-w-sm h-48 md:h-auto object-contain"
+            />
+          </div>
+        </div>
+
+        {/* Second row with images 5 and 6 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16 max-w-6xl mx-auto px-4">
+          {/* Geo-Tagged Alerts */}
+          <div className="flex justify-center">
+            <img
+              src="/image5.png"
+              alt="Geo-tagged alerts"
+              className="w-full max-w-md md:max-w-lg h-auto object-contain"
+            />
+          </div>
+
+          {/* Trend Analysis */}
+          <div className="flex justify-center">
+            <img
+              src="/image6.png"
+              alt="Trend analysis"
+              className="w-full max-w-md md:max-w-lg h-auto object-contain"
             />
           </div>
         </div>
@@ -224,7 +308,7 @@ const Landing = () => {
 
         <div className="relative max-w-4xl mx-auto mb-5">
           <img
-            src="/map-red.jpg"
+            src="/map-orange.png"
             alt="Interactive Map Visualization"
             className="w-full h-auto rounded-lg"
           />
@@ -283,42 +367,81 @@ const Landing = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-600">
+              Find quick answers to the things people ask most
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqData.map((faq, index) => (
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg overflow-hidden"
+              >
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors duration-200 flex justify-between items-center"
+                >
+                  <span className="font-medium text-gray-900">
+                    {faq.question}
+                  </span>
+                  <div className="flex-shrink-0 ml-4">
+                    {openFAQ === index ? (
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <FaChevronUp className="w-3 h-3 text-white" />
+                      </div>
+                    ) : (
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <FaChevronDown className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                  </div>
+                </button>
+                {openFAQ === index && (
+                  <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                    <p className="text-gray-700 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Banner */}
+          <div className="mt-16">
+            <img
+              src="/blue-card.png"
+              alt="LassaLens Banner"
+              className="w-full h-auto rounded-2xl"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between">
             {/* Social Media Icons */}
-            <div className="flex items-start gap-4 mb-8 md:mb-0">
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <FaTwitter className="w-5 h-5 text-gray-600" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <FaFacebook className="w-5 h-5 text-gray-600" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <FaWhatsapp className="w-5 h-5 text-gray-600" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-              >
-                <FaEnvelope className="w-5 h-5 text-gray-600" />
-              </a>
+            <div className="flex items-start gap-2 mb-8 md:mb-0">
+              <img src="/lassa-icon.png" alt="Lassa Lens" className="w-8 h-8" />
+              <span className="text-[22px] font-semibold text-gray-800">
+                LassaLens
+              </span>
             </div>
 
             {/* Footer Links */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">LassaLens</h3>
                 <ul className="space-y-3 text-gray-600">
                   <li>
                     <Link
@@ -341,23 +464,7 @@ const Landing = () => {
                       href="#"
                       className="hover:text-gray-900 transition-colors"
                     >
-                      Research
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="hover:text-gray-900 transition-colors"
-                    >
-                      Data Sources
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="hover:text-gray-900 transition-colors"
-                    >
-                      About Flow
+                      About LassaLens
                     </a>
                   </li>
                 </ul>
