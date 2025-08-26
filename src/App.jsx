@@ -12,6 +12,7 @@ import SignIn from "./components/SignIn";
 import Dashboard from "./components/Dashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import About from "./components/About";
 import "./App.css";
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
         <Routes>
           {/* Landing page - always accessible */}
           <Route path="/" element={<LandingPage />} />
+          
+          {/* About page - always accessible */}
+          <Route path="/about" element={<About />} />
 
           <Route
             path="/signup"

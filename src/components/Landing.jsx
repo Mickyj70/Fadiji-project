@@ -85,7 +85,7 @@ const Landing = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <a
-              href="#"
+              href="/about"
               className="text-gray-600 hover:text-gray-800 transition-colors"
             >
               About
@@ -156,7 +156,7 @@ const Landing = () => {
                 Launch App
               </Link>
               <a
-                href="#"
+                href="/about"
                 className="block text-gray-600 hover:text-gray-800 transition-colors"
               >
                 About
