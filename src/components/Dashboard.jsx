@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   Bell,
@@ -13,12 +14,61 @@ import {
   HeartPulse,
   Plus,
   XCircle,
+  Loader2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import NigeriaMap from "./NigeriaMap";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+
+  const [selectedState, setSelectedState] = useState(null);
+  const [stateData, setStateData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
+
+  // API call function
+  const fetchStateData = async (stateName) => {
+    setLoading(true);
+    setApiError(null);
+
+    try {
+      const response = await fetch("/api/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tweet: `who reports new cases of lassa fever as death toll rises in ${stateName.toLowerCase()}`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setStateData((prev) => ({
+        ...prev,
+        [stateName]: data,
+      }));
+    } catch (error) {
+      console.error("API Error:", error);
+      setApiError(`Failed to fetch data for ${stateName}: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //handle state click
+  const handleStateClick = (stateName) => {
+    setSelectedState(stateName);
+    if (!stateData[stateName]) {
+      fetchStateData(stateName);
+    }
+  };
 
   // Theme state (persist + toggle <html>.dark)
   const [dark, setDark] = useState(() => {
@@ -51,35 +101,35 @@ export default function DashboardPage() {
   };
 
   // Mock list
-  const reportItems = useMemo(
-    () => [
-      {
-        sourceIcon: "📰",
-        source: "Punch News",
-        text: "Two suspected cases reported in Lafia, Nasarawa State. Blood samples sent for testing.",
-        date: "Aug 4 2024",
-      },
-      {
-        sourceIcon: "𝕏",
-        source: "X",
-        text: "In Irrua, Edo State, a woman tested positive for Lassa fever. Contact tracing has begun in Uromi.",
-        date: "Aug 4 2024",
-      },
-      {
-        sourceIcon: "🟢",
-        source: "NCDC",
-        text: "In Asaba, Delta State, 15 suspected fever cases reported. 3 referred to FMC Asaba.",
-        date: "Aug 4 2024",
-      },
-      {
-        sourceIcon: "📘",
-        source: "Facebook",
-        text: "A confirmed case reported at AE-FUTHA in Abakaliki. Patient is in isolation.",
-        date: "Aug 4 2024",
-      },
-    ],
-    []
-  );
+  // const reportItems = useMemo(
+  //   () => [
+  //     {
+  //       sourceIcon: "📰",
+  //       source: "Punch News",
+  //       text: "Two suspected cases reported in Lafia, Nasarawa State. Blood samples sent for testing.",
+  //       date: "Aug 4 2024",
+  //     },
+  //     {
+  //       sourceIcon: "𝕏",
+  //       source: "X",
+  //       text: "In Irrua, Edo State, a woman tested positive for Lassa fever. Contact tracing has begun in Uromi.",
+  //       date: "Aug 4 2024",
+  //     },
+  //     {
+  //       sourceIcon: "🟢",
+  //       source: "NCDC",
+  //       text: "In Asaba, Delta State, 15 suspected fever cases reported. 3 referred to FMC Asaba.",
+  //       date: "Aug 4 2024",
+  //     },
+  //     {
+  //       sourceIcon: "📘",
+  //       source: "Facebook",
+  //       text: "A confirmed case reported at AE-FUTHA in Abakaliki. Patient is in isolation.",
+  //       date: "Aug 4 2024",
+  //     },
+  //   ],
+  //   []
+  // );
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -232,8 +282,8 @@ export default function DashboardPage() {
 
       {/* PAGE */}
       <main className="mx-auto max-w-[1200px] gap-5 px-3 py-5 lg:grid lg:grid-cols-3">
-        {/* LEFT: stats + globe - Make it sticky */}
-        <section className="lg:col-span-2 lg:sticky lg:top-5 lg:h-screen lg:overflow-hidden">
+        {/* LEFT: stats + map - Make it scrollable */}
+        <section className="lg:col-span-2 lg:sticky lg:top-5 lg:h-screen lg:overflow-y-auto lg:pr-4">
           <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               { label: "New Cases", value: "340" },
@@ -253,16 +303,89 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          <div className="relative rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div className="absolute inset-x-6 top-4 flex items-center justify-between">
+          <div className="relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="absolute inset-x-4 top-3 flex items-center justify-between">
               <span className="h-1.5 w-6 rounded bg-emerald-500" />
               <span className="h-1.5 w-6 rounded bg-emerald-500" />
             </div>
-            <div className="flex h-[500px] items-center justify-center">
-              <div className="text-center text-gray-300 dark:text-gray-600">
-                <Globe2 className="mx-auto mb-4 h-40 w-40" />
-                <p className="text-sm">No Geographic Data Yet</p>
-              </div>
+
+            <div className="h-[450px] pt-1">
+              {loading && (
+                <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center z-10">
+                  <div className="flex items-center gap-2 text-emerald-600">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Analyzing {selectedState}...</span>
+                  </div>
+                </div>
+              )}
+
+              <NigeriaMap
+                onStateClick={handleStateClick}
+                selectedState={selectedState}
+                stateData={stateData}
+              />
+
+              {apiError && (
+                <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  {apiError}
+                </div>
+              )}
+
+              {/* {selectedState && stateData[selectedState] && (
+                <div className="mt-3 p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
+                  <h4 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-2">
+                    {selectedState} Analysis Results
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Relevance:
+                      </span>
+                      <span
+                        className={`ml-2 font-medium ${
+                          stateData[selectedState].is_relevant
+                            ? "text-green-600 dark:text-green-400"
+                            : "text-red-600 dark:text-red-400"
+                        }`}
+                      >
+                        {stateData[selectedState].is_relevant
+                          ? "Relevant"
+                          : "Not Relevant"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Confidence:
+                      </span>
+                      <span className="ml-2 font-medium text-gray-900 dark:text-gray-100">
+                        {(stateData[selectedState].score * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Lassa Related:
+                      </span>
+                      <span
+                        className={`ml-2 font-medium ${
+                          stateData[selectedState].label === "1"
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-green-600 dark:text-green-400"
+                        }`}
+                      >
+                        {stateData[selectedState].label === "1" ? "Yes" : "No"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Location:
+                      </span>
+                      <span className="ml-2 font-medium text-gray-900 dark:text-gray-100">
+                        {stateData[selectedState].location}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )} */}
             </div>
           </div>
         </section>
@@ -272,52 +395,194 @@ export default function DashboardPage() {
           <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
               <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                Report
+                {selectedState ? `${selectedState} Report` : "Report"}
               </h3>
               <button className="rounded-md bg-none border border-gray-300  px-2 py-1 text-xs text-gray-600  dark:border-gray-700 dark:text-gray-300 ">
                 Today
               </button>
             </div>
 
-            <div className="space-y-2 px-4 py-3">
-              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                  AI
-                </span>
-                LassaLens AI — Scanning 40 Sources for report
-              </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-                <div className="h-full w-1/2 rounded-full bg-emerald-500" />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between px-4 pb-1 pt-2">
-              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                20 Report Found
-              </div>
-              <button className="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">
-                See All
-              </button>
-            </div>
-
-            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-              {reportItems.map((r, i) => (
-                <li key={i} className="px-4 py-3">
-                  <div className="mb-1 flex items-center gap-2 text-xs text-gray-500">
-                    <span className="rounded bg-gray-100 px-1.5 py-0.5 dark:bg-gray-800">
-                      {r.sourceIcon}
+            {selectedState ? (
+              <>
+                <div className="space-y-2 px-4 py-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                      AI
                     </span>
-                    <span className="font-medium text-gray-700 dark:text-gray-300">
-                      {r.source}
+                    LassaLens AI — Analyzing {selectedState} data sources
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                    <div className="h-full w-3/4 rounded-full bg-emerald-500" />
+                  </div>
+                </div>
+
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                      <div className="text-red-600 dark:text-red-400 font-semibold">
+                        Active Cases
+                      </div>
+                      <div className="text-2xl font-bold text-red-700 dark:text-red-300">
+                        {selectedState === "Lagos"
+                          ? "45"
+                          : selectedState === "Kano"
+                          ? "23"
+                          : selectedState === "Rivers"
+                          ? "18"
+                          : Math.floor(Math.random() * 50) + 5}
+                      </div>
+                    </div>
+                    <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg">
+                      <div className="text-orange-600 dark:text-orange-400 font-semibold">
+                        Suspected
+                      </div>
+                      <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                        {selectedState === "Lagos"
+                          ? "12"
+                          : selectedState === "Kano"
+                          ? "8"
+                          : selectedState === "Rivers"
+                          ? "6"
+                          : Math.floor(Math.random() * 20) + 2}
+                      </div>
+                    </div>
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                      <div className="text-green-600 dark:text-green-400 font-semibold">
+                        Recovered
+                      </div>
+                      <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                        {selectedState === "Lagos"
+                          ? "38"
+                          : selectedState === "Kano"
+                          ? "19"
+                          : selectedState === "Rivers"
+                          ? "15"
+                          : Math.floor(Math.random() * 40) + 10}
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                      <div className="text-gray-600 dark:text-gray-400 font-semibold">
+                        Deaths
+                      </div>
+                      <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">
+                        {selectedState === "Lagos"
+                          ? "3"
+                          : selectedState === "Kano"
+                          ? "2"
+                          : selectedState === "Rivers"
+                          ? "1"
+                          : Math.floor(Math.random() * 5)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between px-4 pb-1 pt-2">
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {selectedState === "Lagos"
+                      ? "15"
+                      : selectedState === "Kano"
+                      ? "8"
+                      : selectedState === "Rivers"
+                      ? "12"
+                      : Math.floor(Math.random() * 20) + 5}{" "}
+                    Recent Reports
+                  </div>
+                  <button className="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">
+                    See All
+                  </button>
+                </div>
+
+                <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                  {[
+                    {
+                      source: "NCDC",
+                      sourceIcon: "🏥",
+                      text: `New Lassa fever case confirmed in ${selectedState} - Patient isolated and contact tracing initiated`,
+                      date: "2 hours ago",
+                      severity: "high",
+                    },
+                    {
+                      source: "Local Hospital",
+                      sourceIcon: "🩺",
+                      text: `${selectedState} General Hospital reports suspected case under investigation`,
+                      date: "4 hours ago",
+                      severity: "moderate",
+                    },
+                    {
+                      source: "WHO Nigeria",
+                      sourceIcon: "🌍",
+                      text: `WHO team deployed to ${selectedState} for outbreak response support`,
+                      date: "6 hours ago",
+                      severity: "low",
+                    },
+                    {
+                      source: "State Ministry",
+                      sourceIcon: "🏛️",
+                      text: `${selectedState} State activates emergency response protocol for Lassa fever`,
+                      date: "8 hours ago",
+                      severity: "high",
+                    },
+                  ].map((r, i) => (
+                    <li key={i} className="px-4 py-3">
+                      <div className="mb-1 flex items-center gap-2 text-xs text-gray-500">
+                        <span className="rounded bg-gray-100 px-1.5 py-0.5 dark:bg-gray-800">
+                          {r.sourceIcon}
+                        </span>
+                        <span className="font-medium text-gray-700 dark:text-gray-300">
+                          {r.source}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            r.severity === "high"
+                              ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                              : r.severity === "moderate"
+                              ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300"
+                              : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                          }`}
+                        >
+                          {r.severity}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-800 dark:text-gray-200">
+                        {r.text}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-400">{r.date}</div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <div className="space-y-2 px-4 py-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                      AI
                     </span>
+                    LassaLens AI — Scanning 40 Sources for report
                   </div>
-                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                    {r.text}
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                    <div className="h-full w-1/2 rounded-full bg-emerald-500" />
                   </div>
-                  <div className="mt-1 text-xs text-gray-400">{r.date}</div>
-                </li>
-              ))}
-            </ul>
+                </div>
+
+                <div className="flex items-center justify-between px-4 pb-1 pt-2">
+                  <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    20 Report Found
+                  </div>
+                  <button className="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400">
+                    See All
+                  </button>
+                </div>
+
+                <div className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">
+                    Click on a state in the map to view detailed reports
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Filter */}
@@ -325,7 +590,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
               <h3 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100">
                 <FilterIcon className="h-4 w-4" />
-                Filter
+                Filter {selectedState && `- ${selectedState}`}
               </h3>
             </div>
 
@@ -389,7 +654,12 @@ export default function DashboardPage() {
                 <div className="relative">
                   <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <input
-                    placeholder="Enter State, City, LGA"
+                    placeholder={
+                      selectedState
+                        ? `${selectedState} - Enter LGA, City`
+                        : "Enter State, City, LGA"
+                    }
+                    value={selectedState || ""}
                     className="w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                   />
                 </div>
@@ -418,7 +688,7 @@ export default function DashboardPage() {
               </section>
 
               <button className="mt-1 w-full rounded-lg bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700">
-                Clear Filter
+                Apply Filter
               </button>
             </div>
           </div>

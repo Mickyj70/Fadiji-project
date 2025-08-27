@@ -14,6 +14,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import About from "./components/About";
 import "./App.css";
+import "leaflet/dist/leaflet.css";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -46,7 +47,7 @@ function App() {
         <Routes>
           {/* Landing page - always accessible */}
           <Route path="/" element={<LandingPage />} />
-          
+
           {/* About page - always accessible */}
           <Route path="/about" element={<About />} />
 
