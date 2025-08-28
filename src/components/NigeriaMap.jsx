@@ -68,7 +68,7 @@ const NigeriaMap = ({ onStateClick, selectedState, stateData }) => {
         Lassa Related: ${d.label === "1" ? "Yes" : "No"}`
       );
     } else {
-      layer.bindTooltip(`<strong>${stateName}</strong><br/>No data`);
+      layer.bindTooltip(`<strong>${stateName}</strong><br/>Loading`);
     }
   };
 
