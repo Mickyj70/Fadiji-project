@@ -73,13 +73,13 @@ const NigeriaMap = ({ onStateClick, selectedState, stateData }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col text-black dark:text-white">
       <h3 className="text-lg font-semibold mb-2">
         Nigeria Lassa Fever Surveillance Map
       </h3>
 
       {/* ✅ Legend Section */}
-      <div className="flex flex-wrap gap-4 mb-3 text-sm">
+      <div className="flex flex-wrap gap-4 mb-3 text-sm text-gray-800 dark:text-white">
         <div className="flex items-center gap-1">
           <span className="w-4 h-4 rounded bg-red-500 inline-block"></span>
           <span>High Risk (&gt;80%)</span>

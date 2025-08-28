@@ -19,6 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import NigeriaMap from "./NigeriaMap";
+import { mockStateData } from "../data/mockStateData";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -28,34 +29,28 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
 
-  // API call function
+  // Updated API call function to use mock data
   const fetchStateData = async (stateName) => {
     setLoading(true);
     setApiError(null);
 
     try {
-      const response = await fetch("/api/predict", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tweet: `who reports new cases of lassa fever as death toll rises in ${stateName.toLowerCase()}`,
-        }),
-      });
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Get mock data for the state
+      const data = mockStateData[stateName];
+
+      if (data) {
+        setStateData((prev) => ({
+          ...prev,
+          [stateName]: data,
+        }));
+      } else {
+        throw new Error(`No data available for ${stateName}`);
       }
-
-      const data = await response.json();
-
-      setStateData((prev) => ({
-        ...prev,
-        [stateName]: data,
-      }));
     } catch (error) {
-      console.error("API Error:", error);
+      console.error("Mock API Error:", error);
       setApiError(`Failed to fetch data for ${stateName}: ${error.message}`);
     } finally {
       setLoading(false);
@@ -286,10 +281,10 @@ export default function DashboardPage() {
         <section className="lg:col-span-2 lg:sticky lg:top-5 lg:h-screen lg:overflow-y-auto lg:pr-4">
           <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              { label: "New Cases", value: "340" },
-              { label: "Total Cases", value: "5,700" },
-              { label: "Incidence Rate", value: "7.6/100" },
-              { label: "Reported Deaths", value: "940" },
+              { label: "New Cases", value: "6939" },
+              { label: "Total Cases", value: "822" },
+              { label: "Incidence Rate", value: "18/100" },
+              { label: "Reported Deaths", value: "154" },
             ].map((s) => (
               <div
                 key={s.label}
