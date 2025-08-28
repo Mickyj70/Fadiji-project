@@ -19,32 +19,34 @@ const NigeriaMap = ({ onStateClick, selectedState, stateData }) => {
       feature.properties.NAME;
 
     const data = stateData[stateName];
+    const isSelected = selectedState === stateName;
 
-    if (selectedState === stateName) {
-      return {
-        fillColor: "#10b981",
-        weight: 2,
-        color: "black",
-        fillOpacity: 0.7,
-      };
-    }
+    // Determine base color based on data
+    let fillColor = "#e5e7eb"; // Default gray
 
     if (data) {
       if (data.is_relevant && data.label === "1") {
-        return {
-          fillColor: data.score > 0.8 ? "#ef4444" : "#f97316",
-          weight: 1,
-          color: "black",
-          fillOpacity: 0.6,
-        };
+        fillColor = data.score > 0.8 ? "#ef4444" : "#f97316"; // Red or Orange
       }
     }
 
+    // If selected, keep the data-based color but add selection styling
+    if (isSelected) {
+      return {
+        fillColor: fillColor,
+        weight: 1, // Thicker border for selection
+        color: "#000000", // Black border
+        fillOpacity: 0.8, // Slightly more opaque
+        dashArray: "2, 2", // Dashed border to indicate selection
+      };
+    }
+
+    // Regular styling for non-selected states
     return {
-      fillColor: "#e5e7eb",
+      fillColor: fillColor,
       weight: 1,
       color: "black",
-      fillOpacity: 0.5,
+      fillOpacity: 0.6,
     };
   };
 

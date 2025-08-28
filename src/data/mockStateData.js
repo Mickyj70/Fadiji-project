@@ -534,9 +534,9 @@ export const mockStateData = {
     deaths: 0,
     trend: "decreasing",
     lastUpdated: "2024-01-15",
-    is_relevant: false,
+    is_relevant: true,
     score: 0.85,
-    label: "0",
+    label: "1",
     location: "Zamfara State",
   },
   FCT: {
